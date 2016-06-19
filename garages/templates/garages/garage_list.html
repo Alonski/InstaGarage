@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li><a href="{% url 'garages:restaurant_list' %}">Restaurants</a></li>
+{% endblock %}
+
+{% block mypage %}
+    <li><a href="{% url 'garages:restaurant_list' %}">My Restaurants</a></li>
+{% endblock %}
+
+{% block content %}
+    {#    {{ view.fields }}#}
+    <a href="{% url 'garages:restaurant_add' %}">Add Restaurant</a>
+    <div class="table-responsive">
+        <table id="restTable" class="table table-hover tablesorter">
+            <thead>
+            <tr class="info">
+                {% for field in view.fields %}
+                    <th>{{ field|title }}</th>
+                {% endfor %}
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                <tr>
+                    <td><a href="{% url 'garages:restaurant_detail' object.pk %}">{{ object.name }}</a></td>
+                    <td>{{ object.address }}</td>
+                    <td>{{ object.phone }}</td>
+                    <td>{{ object.email }}</td>
+                    <td>{{ object.active }}</td>
+                    <td>{{ object.owner }}</td>
+                    <td>{{ object.description }}</td>
+                    <td><a href="{% url 'garages:restaurant_update' object.pk %}">Update</a></td>
+                    <td><a href="{% url 'garages:restaurant_delete' object.pk %}">Delete</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            {#        <tfoot>#}
+            {#        <tr>#}
+            {#            <td>Total:</td>#}
+            {#            <td>$ {{ view.total }}</td>#}
+            {#            <td></td>#}
+            {#        </tr>#}
+            {#        </tfoot>#}
+        </table>
+    </div>
+{% endblock %}
+
+{% block css %}
+    <link href="{% static "garages/css/tables.css" %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static "garages/js/jquery.tablesorter.js" %}"></script>
+    <script>
+        $(document).ready(function () {
+                    $("#restTable").tablesorter();
+                }
+        );
+    </script>
+{% endblock %}

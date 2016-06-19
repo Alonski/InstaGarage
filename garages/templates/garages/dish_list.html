@@ -1,0 +1,52 @@
+{% extends "bite/garage_detail.html" %}
+{% load staticfiles %}
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li><a href="{% url 'garages:dishes_list' view.restaurant.id %}">Restaurant Menu</a></li>
+{% endblock %}
+
+{% block mypage %}
+    <li><a href="{% url 'garages:restaurant_list' %}">My Restaurants</a></li>
+{% endblock %}
+
+{% block content %}
+    <a href="{% url 'garages:dishes_add' view.restaurant.id %}">Add New Dish</a>
+    <div class="table-responsive">
+        <table id="menuTable" class="table table-hover tablesorter">
+            <thead>
+            <tr class="info">
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                <tr>
+                    <td>{{ object.name }}</td>
+                    <td>$ {{ object.price }}</td>
+                    <td>{{ object.description }}</td>
+                    <td><a href="{% url 'garages:dishes_update' view.restaurant.id object.pk %}">Update</a></td>
+                    <td><a href="{% url 'garages:dishes_delete' view.restaurant.id object.pk %}">Delete</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block css %}
+    <link href="{% static "garages/css/tables.css" %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static "garages/js/jquery.tablesorter.js" %}"></script>
+    <script>
+        $(document).ready(function () {
+                    $("#menuTable").tablesorter();
+                }
+        );
+    </script>
+{% endblock %}

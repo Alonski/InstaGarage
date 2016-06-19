@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{#{% block mypage %}#}
+{#    <li><a href="#register_or_login">Register or Login</a></li>#}
+{#{% endblock %}#}
+
+{% block content %}
+    {#    {{ view.fields }}#}
+    <div class="panel panel-danger">
+        <div class="panel-heading text-center">Choose a Restaurant To Order From</div>
+{#        <div class="panel-body">Choose a restaurant to order from..</div>#}
+    </div>
+{#    <a href="{% url 'garages:restaurant_list' %}">Your Restaurants</a>#}
+    <div class="table-responsive">
+
+        <table id="restTable" class="table table-hover tablesorter">
+            <thead>
+            <tr class="info">
+                {% for field in view.fields %}
+                    <th>{{ field|title }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                <tr>
+{#                    <td><a href="{% url 'garages:user_order' object.pk %}">{{ object.name }}</a></td>#}
+                    <td>{{ object.address }}</td>
+                    <td>{{ object.phone }}</td>
+                    <td>{{ object.description }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            {#        <tfoot>#}
+            {#        <tr>#}
+            {#            <td>Total:</td>#}
+            {#            <td>$ {{ view.total }}</td>#}
+            {#            <td></td>#}
+            {#        </tr>#}
+            {#        </tfoot>#}
+        </table>
+    </div>
+{% endblock %}
+
+{% block css %}
+    <link href="{% static "garages/css/tables.css" %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static "garages/js/jquery.tablesorter.js" %}"></script>
+    <script>
+        $(document).ready(function () {
+                    $("#restTable").tablesorter();
+                }
+        );
+    </script>
+{% endblock %}

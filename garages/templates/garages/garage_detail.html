@@ -1,66 +1,70 @@
-{% extends "garages/garage_list.html" %}
+{% extends "base.html" %}
 {% load staticfiles %}
+{% load mptt_tags %}
+
 {% block breadcrumbs %}
-{#    {{ block.super }}#}
-{#    {% if not view.restaurant.name %}#}
-{#        <li><a href="{{ view.restaurant.get_absolute_url }}">{{ object.name }}</a></li>#}
-{#    {% else %}#}
-{#        <li><a href="{{ view.restaurant.get_absolute_url }}">{{ view.restaurant.name }}</a></li>#}
-{#    {% endif %}#}
+    {{ block.super }}
+    {#    {% if not view.restaurant.name %}#}
+    {#        <li><a href="{{ view.restaurant.get_absolute_url }}">{{ object.name }}</a></li>#}
+    {#    {% else %}#}
+    {#        <li><a href="{{ view.restaurant.get_absolute_url }}">{{ view.restaurant.name }}</a></li>#}
+    {#    {% endif %}#}
 {% endblock %}
 
 {% block mypage %}
-    <li xmlns="http://www.w3.org/1999/html"><a href="{% url 'garages:index' %}">My Restaurants</a></li>
+    <li><a href="{% url 'garages:index' %}">My Garage</a></li>
 {% endblock %}
 
 {% block content %}
     <div class="row">
-        <div class="col-md-6">
-            <h3>My Garage - {{ object.name }}</h3>
-{#            <p><a href="{% url 'garages:dishes_list' object.id %}">Edit Menu</a></p>#}
-            <div>
-                <p>
-                    Address: {{ object.address }}<br>
-                    Phone: {{ object.phone }}<br>
-                    Description: {{ object.description }}<br>
-                    Garage Hours: {{ object.openTime }} - {{ object.closeTime }}<br>
-                </p>
-            </div>
-
-            <div class="table-responsive">
-{#                <table id="menuTable" class="table table-hover tablesorter">#}
-{#                    <thead>#}
-{#                    <tr class="info">#}
-{#                        <th>Name</th>#}
-{#                        <th>Price</th>#}
-{#                        <th>Description</th>#}
-{#                    </tr>#}
-{#                    </thead>#}
-{#                    <tbody>#}
-{#                    {% for object in view.dishes %}#}
-{#                        <tr>#}
-{#                            <td>{{ object.name }}</td>#}
-{#                            <td>$ {{ object.price }}</td>#}
-{#                            <td>{{ object.description }}</td>#}
-{#                        </tr>#}
-{#                    {% endfor %}#}
-{#                    </tbody>#}
-                    {#        <tfoot>#}
-                    {#        <tr>#}
-                    {#            <td>Total:</td>#}
-                    {#            <td>$ {{ view.total }}</td>#}
-                    {#            <td></td>#}
-                    {#        </tr>#}
-                    {#        </tfoot>#}
-{#                </table>#}
-            </div>
+        <div class="col-xs-4"><p class="text-center"><a href="#OrderPage" class="btn btn-primary" role="button">Order Car Care</a></p></div>
+        <div class="col-xs-4"><h3 class="text-center">Garage: {{ object.name }}</h3></div>
+        <div class="col-xs-4"><p class="text-center"><input id="input-7-xs" class="rating rating-loading" value="5" data-min="0" data-max="5" data-step="0.1" data-size="xs"></div>
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-xs-6">
+            {#            <p><a href="{% url 'garages:dishes_list' object.id %}">Edit Menu</a></p>#}
+            <img class="img-responsive img-rounded center-block"
+                 src="https://maps.googleapis.com/maps/api/staticmap?center={{ object.address }},Israel&zoom=16&maptype=hybrid&size=640x400&markers=color:green%7Clabel:T%7C32.012178, 34.798973&path=weight:3%7Ccolor:blue%7Cenc:{coaHnetiVjM??_SkM??~R&key=AIzaSyAFy1k94bVIldOd7QbZj-TKHgTFfW3ARro"
+                 alt="">
+            <p class="text-center">Address: {{ object.address }}</p>
         </div>
-        <div class="col-md-6">
-            <h3 class="text-center">Orders</h3>
-{#            <p><a href="{% url 'garages:restaurant_orders' object.id %}">View Orders</a></p>#}
-{#            {% if not view.orders %}#}
-{#                No Orders to display#}
-{#            {% else %}#}
+        <div class="col-xs-6">
+            <p class="text-center">Garage Hours: {{ object.openTime }} - {{ object.closeTime }}
+                {% if garage.is_open %}
+                    <span class="label label-info"> We Are Open!</span>
+                {% else %}
+                    <span class="label label-danger"> We Are Closed!</span>
+                {% endif %}
+            </p>
+            <p class="text-center">Phone: {{ object.phone }} <a href="tel:{{ object.phone }}" class="btn btn-sm btn-primary" role="button"><span
+                    class="glyphicon glyphicon-phone-alt"></span> Call Now!</a></p>
+            <p> Description: {{ object.description }}</p>
+            <p>
+                Cars We Work On:
+            </p>
+            <ul>
+                {% recursetree view.nodes %}
+                    <li>
+                        {{ node.name }}
+                        {% if not node.is_leaf_node %}
+                            <ul class="children">
+                                {{ children }}
+                            </ul>
+                        {% endif %}
+                    </li>
+                {% endrecursetree %}
+            </ul>
+            {#            {% now "h:i A" %}#}
+        </div>
+        {% if false %}
+            <div class="col-md-6">
+                <h3 class="text-center">Orders</h3>
+                {#            <p><a href="{% url 'garages:restaurant_orders' object.id %}">View Orders</a></p>#}
+                {#            {% if not view.orders %}#}
+                {#                No Orders to display#}
+                {#            {% else %}#}
                 <div class="table-responsive">
                     <table id="orderTable" class="table table-hover tablesorter">
                         <thead>
@@ -73,29 +77,32 @@
                         </tr>
                         </thead>
                         <tbody>
-{#                        {% for object in view.orders %}#}
-{#                            <tr>#}
-{#                                <td>{{ object.id }}</td>#}
-{#                                <td># TODO Date Time</td>#}
-{#                                <td>{{ object.price }}</td>#}
-{#                                <td># TODO Ordered By</td>#}
-{#                                <td># TODO Completed</td>#}
-{#                            </tr>#}
-{#                        {% endfor %}#}
+                        {#                        {% for object in view.orders %}#}
+                        {#                            <tr>#}
+                        {#                                <td>{{ object.id }}</td>#}
+                        {#                                <td># TODO Date Time</td>#}
+                        {#                                <td>{{ object.price }}</td>#}
+                        {#                                <td># TODO Ordered By</td>#}
+                        {#                                <td># TODO Completed</td>#}
+                        {#                            </tr>#}
+                        {#                        {% endfor %}#}
                         </tbody>
                     </table>
                 </div>
-{#            {% endif %}#}
-        </div>
+                {#            {% endif %}#}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
 
 {% block css %}
     <link href="{% static "garages/css/tables.css" %}" rel="stylesheet"/>
+    <link href="{% static "kartik-star/css/star-rating.css" %}" rel="stylesheet"/>
 {% endblock %}
 
 {% block scripts %}
     <script src="{% static "garages/js/jquery.tablesorter.js" %}"></script>
+    <script src="{% static "kartik-star/js/star-rating.js" %}"></script>
     <script>
         $(document).ready(function () {
                     $("#menuTable").tablesorter();

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load mptt_tags %}
 
 {#{% block mypage %}#}
 {#    <li><a href="#register_or_login">Register or Login</a></li>#}
@@ -9,9 +10,9 @@
     {#    {{ view.fields }}#}
     <div class="panel panel-danger">
         <div class="panel-heading text-center">Choose a Restaurant To Order From</div>
-{#        <div class="panel-body">Choose a restaurant to order from..</div>#}
+        {#        <div class="panel-body">Choose a restaurant to order from..</div>#}
     </div>
-{#    <a href="{% url 'garages:restaurant_list' %}">Your Restaurants</a>#}
+    {#    <a href="{% url 'garages:restaurant_list' %}">Your Restaurants</a>#}
     <div class="table-responsive">
 
         <table id="restTable" class="table table-hover tablesorter">
@@ -25,7 +26,7 @@
             <tbody>
             {% for object in object_list %}
                 <tr>
-{#                    <td><a href="{% url 'garages:user_order' object.pk %}">{{ object.name }}</a></td>#}
+                    {#                    <td><a href="{% url 'garages:user_order' object.pk %}">{{ object.name }}</a></td>#}
                     <td>{{ object.address }}</td>
                     <td>{{ object.phone }}</td>
                     <td>{{ object.description }}</td>
@@ -41,6 +42,18 @@
             {#        </tfoot>#}
         </table>
     </div>
+    <ul>
+        {% recursetree nodes %}
+            <li>
+                {{ node.name }}
+                {% if not node.is_leaf_node %}
+                    <ul class="children">
+                        {{ children }}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endrecursetree %}
+    </ul>
 {% endblock %}
 
 {% block css %}

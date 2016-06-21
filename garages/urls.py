@@ -4,10 +4,10 @@ from . import views
 app_name = 'garages'
 urlpatterns = [
     url(r'^$', views.GarageDetailView.as_view(), name='index'),
-    # url(r'^login/$', views.LoginView.as_view(), name='login'),
-    # url(r'^registerorlogin/$', views.RegisterOrLoginView.as_view(), name='registerorlogin'),
-    # url(r'^signup/$', views.SignupCustomerView.as_view(), name='signup_customer'),
-    # url(r'^logout/$', views.LogoutView.as_view(), name='logout'),
+    url(r'^login/$', views.LoginView.as_view(), name='login'),
+    url(r'^registerorlogin/$', views.RegisterOrLoginView.as_view(), name='registerorlogin'),
+    url(r'^signup/$', views.SignupCustomerView.as_view(), name='signup_customer'),
+    url(r'^logout/$', views.LogoutView.as_view(), name='logout'),
     # url(r'^restaurants/signup/$', views.SignupRestaurantView.as_view(), name='signup_restaurant'),
     # url(r'^restaurants/$', views.RestaurantListView.as_view(), name='restaurant_list'),
     # url(r'^restaurants/add/$', views.RestaurantCreateView.as_view(), name='restaurant_add'),

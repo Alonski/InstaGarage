@@ -1,4 +1,6 @@
 from django import forms
+from mptt.forms import TreeNodeChoiceField
+from .models import *
 
 
 class LoginForm(forms.Form):
@@ -13,7 +15,7 @@ class SignupForm(forms.Form):
     password = forms.CharField(max_length=300, widget=forms.PasswordInput())
     password_recheck = forms.CharField(max_length=300, widget=forms.PasswordInput())
     email = forms.EmailField(max_length=300)
-    manufacturer = forms.CharField(max_length=30)
-    make = forms.CharField(max_length=30)
-    year = forms.DateField(widget=forms.DateInput)
+    manufacturer = forms.CharField(max_length=30, widget=forms.HiddenInput)
+    make = forms.CharField(max_length=30, widget=forms.HiddenInput)
+    year = forms.DateField(widget=forms.HiddenInput)
     # worker_id = forms.IntegerField()
